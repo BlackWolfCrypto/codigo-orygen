@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Código Orygen · Tu fecha de nacimiento es un código</title>
+<meta name="description" content="La única lectura de la Matriz del Destino que toma en cuenta tu temperamento. Descubre gratis tu código y tu temperamento.">
+<meta property="og:title" content="Código Orygen · Tu fecha de nacimiento es un código">
+<meta property="og:description" content="La Matriz del Destino leída con tu temperamento. Descubre gratis qué energías traes y cómo las vives.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' fill='%2321080C'/><g fill='none' stroke='%23D4AE5A' stroke-width='2.4'><rect x='10' y='10' width='20' height='20'/><rect x='10' y='10' width='20' height='20' transform='rotate(45 20 20)'/></g></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.hero{padding:88px 0 96px}
+.hero .g2{align-items:center}
+.hero h1{margin:0 0 22px}
+.hero .lede{margin:0 0 34px}
+.hero .note{margin-top:16px;font-size:.92rem;color:var(--muted)}
+.octo{width:100%;max-width:440px;justify-self:center}
+.octo .f{fill:none;stroke:rgba(241,230,212,.18);stroke-width:1.2}
+.octo .n{fill:var(--bg);stroke:var(--ink);stroke-width:1.4}
+.octo .c{fill:var(--bg);stroke:var(--gold);stroke-width:2}
+.octo .lk{fill:var(--surface);stroke:rgba(241,230,212,.18)}
+.octo text{font-family:var(--display);font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;font-size:24px}
+.octo text.cc{fill:var(--gold);font-size:30px}
+.octo text.el{font-family:var(--body);font-weight:500;font-size:11px;fill:var(--muted)}
+
+.problem p+p{margin-top:16px}
+.problem .strong{font-weight:600;color:var(--bone-ink)}
+
+.houses{margin-top:48px}
+.house{border-top:2px solid var(--gold);padding-top:20px}
+.house .t{font-family:var(--display);font-weight:600;font-size:1.9rem;line-height:1.1}
+.house .s{color:var(--gold);font-size:.92rem;margin:2px 0 10px}
+.house .d{color:var(--muted);margin:0 0 10px}
+.house .m{font-size:.92rem}
+
+.redblack{margin-top:56px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.rb{display:flex;gap:16px;align-items:flex-start;padding:20px 22px;border-radius:6px;background:var(--bg)}
+.rb.open{background:var(--bone);color:var(--bone-ink)}
+.rb .dot{width:12px;height:12px;border-radius:50%;margin-top:7px;flex-shrink:0;background:var(--red)}
+.rb.open .dot{background:var(--bone-ink)}
+.rb b{display:block}
+@media (max-width:900px){.redblack{grid-template-columns:1fr}}
+
+/* LADDER */
+.ladder-intro{max-width:44em;margin:0 0 56px}
+.ladder{list-style:none;margin:0;padding:0;position:relative}
+.ladder::before{content:"";position:absolute;left:27px;top:8px;bottom:8px;width:1px;background:var(--bone-line)}
+.step{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,260px);gap:28px;padding:30px 0;border-bottom:1px solid var(--bone-line)}
+.step:last-child{border-bottom:0}
+.step .num{width:56px;height:56px;border-radius:50%;background:var(--bone);border:1px solid var(--bone-ink);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.6rem;position:relative;z-index:1}
+.step.free .num{background:var(--bone-ink);color:var(--bone)}
+.step h3{margin:6px 0 6px}
+.step .what{color:var(--bone-muted);margin:0 0 12px}
+.step ul{margin:0;padding-left:18px;color:var(--bone-ink)}
+.step li{margin:3px 0}
+.step .side{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:6px}
+.price{font-family:var(--display);font-weight:700;font-size:2.2rem;line-height:1}
+.price small{font-family:var(--body);font-size:.85rem;font-weight:500;color:var(--bone-muted)}
+.alt{font-size:.88rem;color:var(--bone-muted)}
+.credit{font-size:.88rem;color:var(--bone-red);font-weight:600}
+@media (max-width:900px){.step{grid-template-columns:56px minmax(0,1fr)}.step .side{grid-column:2}}
+
+/* journey strip */
+.journey{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:48px;font-size:.95rem}
+.journey span{padding:8px 14px;border:1px solid var(--bone-line);border-radius:999px}
+.journey i{color:var(--bone-red);font-style:normal}
+
+/* JUEGO */
+.weeks{margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line)}
+.wk{padding:20px 22px 20px 0;border-bottom:1px solid var(--line)}
+.wk .w{font-family:var(--display);font-weight:700;font-size:1.9rem;line-height:1;color:var(--gold)}
+.wk .t{font-weight:600;margin:6px 0 2px}
+.wk .d{color:var(--muted);font-size:.94rem}
+@media (max-width:900px){.weeks{grid-template-columns:1fr}}
+.includes{margin-top:56px;display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:start}
+.includes ul{list-style:none;margin:0;padding:0}
+.includes li{padding:14px 0;border-top:1px solid var(--line)}
+.includes li:last-child{border-bottom:1px solid var(--line)}
+.includes li b{display:block}
+.includes li span{color:var(--muted)}
+.box{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:32px}
+.box .price{color:var(--ink)}
+.box .alt{color:var(--muted)}
+.box p+p{margin-top:12px}
+@media (max-width:900px){.includes{grid-template-columns:1fr}}
+
+/* events */
+.ev{padding:24px;border:1px solid var(--bone-line);border-radius:6px;display:flex;flex-direction:column;gap:8px}
+.ev .t{font-family:var(--display);font-weight:600;font-size:1.55rem;line-height:1.1}
+.ev .p{font-weight:600;color:var(--bone-red)}
+.ev .d{color:var(--bone-muted)}
+
+/* credits */
+.credits{margin-top:40px}
+.credits li{margin:10px 0}
+
+/* faq */
+details{border-top:1px solid var(--line);padding:20px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:600;font-size:1.06rem;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";float:right;color:var(--gold);font-size:1.3rem;line-height:1}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:10px}
+
+.final{text-align:center}
+.final h2{max-width:14em;margin:0 auto 18px}
+.final .lede{margin:0 auto 34px}
+.final .actions{justify-content:center}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Principal">
+  <div class="wrap">
+    <a class="brand" href="#top"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="22" height="22"/><rect x="9" y="9" width="22" height="22" transform="rotate(45 20 20)"/></g><circle cx="20" cy="20" r="2.6" fill="currentColor"/></svg>Código Orygen</a>
+    <ul>
+      <li><a href="#metodo">El método</a></li>
+      <li><a href="#camino">El camino</a></li>
+      <li><a href="#juego">El Juego</a></li>
+      <li><a href="#eventos">Eventos</a></li>
+      <li><a href="#preguntas">Preguntas</a></li>
+    </ul>
+    <a class="btn sm" href="calculadora.html">Descubre tu código</a>
+  </div>
+</nav>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap g2">
+    <div>
+      <p class="kicker">Código Orygen</p>
+      <h1>Tu fecha de nacimiento es un código.</h1>
+      <p class="lede">La Matriz del Destino te dice qué energías traes. Tu temperamento te dice cómo las vives. Código Orygen es la única lectura que une las dos, porque las dos nacen contigo el mismo día.</p>
+      <div class="actions">
+        <a class="btn" href="calculadora.html">Descubre tu código gratis</a>
+        <a class="btn ghost" href="#camino">Conoce el camino</a>
+      </div>
+      <p class="note">Dos minutos. Tu fecha y catorce preguntas. Sin registro.</p>
+    </div>
+    <svg class="octo" viewBox="0 0 400 400" role="img" aria-label="Octograma de la Matriz con los cuatro elementos">
+      <rect class="f" x="94" y="94" width="212" height="212"/>
+      <polygon class="f" points="200,50 350,200 200,350 50,200"/>
+      <line class="f" x1="200" y1="50" x2="200" y2="350"/><line class="f" x1="50" y1="200" x2="350" y2="200"/>
+      <line class="f" x1="94" y1="94" x2="306" y2="306"/><line class="f" x1="306" y1="94" x2="94" y2="306"/>
+      <circle class="lk" cx="94" cy="94" r="7"/><circle class="lk" cx="306" cy="94" r="7"/><circle class="lk" cx="306" cy="306" r="7"/><circle class="lk" cx="94" cy="306" r="7"/>
+      <circle class="n" cx="50" cy="200" r="26"/><circle class="n" cx="200" cy="50" r="26"/><circle class="n" cx="350" cy="200" r="26"/><circle class="n" cx="200" cy="350" r="26"/>
+      <circle class="c" cx="200" cy="200" r="34"/>
+      <text x="200" y="50">?</text><text x="50" y="200">?</text><text x="350" y="200">?</text><text x="200" y="350">?</text><text class="cc" x="200" y="200">?</text>
+      <text class="el" x="200" y="16">Fuego</text><text class="el" x="20" y="250">Aire</text><text class="el" x="380" y="250">Agua</text><text class="el" x="200" y="392">Tierra</text>
+    </svg>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="light problem">
+  <div class="wrap g2">
+    <h2>¿Te has preguntado por qué te pasa siempre lo mismo?</h2>
+    <div>
+      <p class="lede">La misma clase de pareja. El mismo techo con el dinero. La sensación de que viniste a algo más y no sabes a qué.</p>
+      <p class="lede">La Matriz del Destino parte de una idea sencilla: las situaciones se repiten hasta que aprendes la lección que traen. Esa lección está escrita en tu fecha de nacimiento.</p>
+      <p class="strong">Pero conocer tu matriz no basta. Hay que aprender a vivirla, y no todos la vivimos igual.</p>
+    </div>
+  </div>
+</section>
+
+<!-- METODO -->
+<section class="deep" id="metodo">
+  <div class="wrap">
+    <p class="kicker">El Método Código Orygen</p>
+    <h2 style="max-width:16em">Dos personas con la misma fecha no viven igual su destino.</h2>
+    <p class="lede" style="margin-top:18px">Unimos la Matriz del Destino con los cuatro temperamentos hipocráticos. Tu Matriz se calcula con tu fecha; tu temperamento, con un cuestionario breve. Cada temperamento tiene su <strong style="color:var(--ink)">Casa</strong>, las energías que vive con naturalidad, y su <strong style="color:var(--ink)">Medicina</strong>, la energía que lo equilibra.</p>
+    <div class="g4 houses">
+      <div class="house"><p class="t">Fuego</p><p class="s">Colérico</p><p class="d">Voluntad, dirección y logro.</p><p class="m">Medicina: La Templanza</p></div>
+      <div class="house"><p class="t">Aire</p><p class="s">Sanguíneo</p><p class="d">Apertura, conexión y ligereza.</p><p class="m">Medicina: El Ermitaño</p></div>
+      <div class="house"><p class="t">Tierra</p><p class="s">Melancólico</p><p class="d">Profundidad, análisis y rigor.</p><p class="m">Medicina: El Sol</p></div>
+      <div class="house"><p class="t">Agua</p><p class="s">Flemático</p><p class="d">Calma, estabilidad y diplomacia.</p><p class="m">Medicina: La Torre</p></div>
+    </div>
+    <div class="redblack">
+      <div class="rb"><span class="dot"></span><div><b>Del rojo…</b><span class="muted">Cada una de tus 22 energías puede vivirse en su lado que te frena: ahí el patrón se repite.</span></div></div>
+      <div class="rb open"><span class="dot"></span><div><b>…al negro</b><span>La misma energía, vivida desde tu temperamento, se vuelve tu talento y tu recurso.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMINO -->
+<section class="light" id="camino">
+  <div class="wrap">
+    <div class="ladder-intro">
+      <p class="kicker">El camino</p>
+      <h2>Empieza gratis. Avanza solo cuando te haga sentido.</h2>
+      <p class="lede" style="margin-top:16px">Cada paso te entrega algo concreto y te prepara para el siguiente. Y lo que pagas en un paso se acredita al siguiente: nada se pierde.</p>
+    </div>
+    <ol class="ladder">
+      <li class="step free">
+        <span class="num">0</span>
+        <div>
+          <h3>Calculadora Código Orygen</h3>
+          <p class="what">Tu primera mirada a tu código.</p>
+          <ul><li>Tu octograma con tus cinco energías principales</li><li>Tu temperamento, tu Casa y tu Medicina</li><li>Tu Mapa de Origen en imagen, por WhatsApp</li></ul>
+        </div>
+        <div class="side"><p class="price">Gratis</p><a class="btn sm" href="calculadora.html">Descubrir mi código</a></div>
+      </li>
+      <li class="step">
+        <span class="num">1</span>
+        <div>
+          <h3>La Llave</h3>
+          <p class="what">Una lectura 1:1 en vivo para abrir tu primera puerta.</p>
+          <ul><li>Sesión de 45 minutos: tu centro, tu retrato, tu propósito personal y tu temperamento con su Medicina</li><li>Tu mapa en PDF, con las zonas que quedan por descubrir</li><li>Un reto de 7 días diseñado para tu temperamento</li></ul>
+        </div>
+        <div class="side"><p class="price">$459 <small>MXN</small></p><p class="credit">Se acredita al 100% al Juego o al programa privado durante 14 días</p><a class="btn sm" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=sitio&amp;utm_campaign=llave" target="_blank" rel="noopener">Quiero mi Llave</a></div>
+      </li>
+      <li class="step">
+        <span class="num">2</span>
+        <div>
+          <h3>Círculo Orygen: El Viaje del Loco</h3>
+          <p class="what">Un año recorriendo los 22 arcanos, uno cada quincena.</p>
+          <ul><li>24 quincenas: apertura, los 22 arcanos y cierre</li><li>Un ejercicio de 14 días en cada quincena, en la versión de tu Casa</li><li>Un mini pronóstico de tu año personal en el mes de tu cumpleaños</li></ul>
+        </div>
+        <div class="side"><p class="price">$279 <small>MXN al mes</small></p><p class="alt">o $2,790 al año: dos meses gratis</p><a class="btn sm ghost" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=sitio&amp;utm_campaign=circulo" target="_blank" rel="noopener">Quiero unirme</a></div>
+      </li>
+      <li class="step">
+        <span class="num">3</span>
+        <div>
+          <h3>El Juego del Destino</h3>
+          <p class="what">Doce semanas para llevar tus energías del rojo al negro, en grupo y con tu Casa.</p>
+          <ul><li>12 sesiones en vivo, una por nivel</li><li>Kit físico: tablero, 22 cartas y bitácora</li><li>La Llave y 3 meses de Círculo incluidos</li></ul>
+        </div>
+        <div class="side"><p class="price">$5,790 <small>MXN</small></p><p class="alt">o 3 pagos de $2,090</p><a class="btn sm" href="#juego">Ver el Juego</a></div>
+      </li>
+      <li class="step">
+        <span class="num">4</span>
+        <div>
+          <h3>Código Orygen Privado</h3>
+          <p class="what">Un proceso 1:1 hacia un objetivo que definimos juntos por escrito.</p>
+          <ul><li>16 sesiones individuales en un máximo de 5 meses</li><li>Lectura completa de todas las capas de tu matriz y pronóstico de tus próximos 3 años personales</li><li>El Juego del Destino, 6 meses de Círculo y acceso VIP a un evento presencial</li></ul>
+        </div>
+        <div class="side"><p class="price">$28,990 <small>MXN</small></p><p class="alt">en 2 o 3 pagos · cupo limitado</p><a class="btn sm ghost" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=sitio&amp;utm_campaign=privado" target="_blank" rel="noopener">Solicitar una plática</a></div>
+      </li>
+      <li class="step">
+        <span class="num">5</span>
+        <div>
+          <h3>Eventos presenciales</h3>
+          <p class="what">El método vivido en persona: talleres, retiros y experiencias para equipos.</p>
+          <ul><li>Desde el Portal de Cumpleaños mensual hasta el retiro El Viaje del Loco</li></ul>
+        </div>
+        <div class="side"><p class="price">Desde $1,090 <small>MXN</small></p><a class="btn sm ghost" href="#eventos">Ver eventos</a></div>
+      </li>
+    </ol>
+    <div class="journey" aria-label="Recorrido">
+      <span>Calculadora</span><i>→</i><span>Mapa de Origen</span><i>→</i><span>La Llave</span><i>→</i><span>El Juego</span><i>→</i><span>Círculo</span><i>→</i><span>Privado</span><i>↺</i><span>Tu próximo cumpleaños</span>
+    </div>
+  </div>
+</section>
+
+<!-- JUEGO -->
+<section id="juego">
+  <div class="wrap">
+    <p class="kicker">El Juego del Destino</p>
+    <h2 style="max-width:16em">Doce semanas. Doce llaves. Una por nivel.</h2>
+    <p class="lede" style="margin-top:16px">El orden sigue el método: empezamos por lo que arrastras del pasado, porque es la base de todo lo demás, y terminamos en tu año personal. Cada reto tiene una versión para tu Casa.</p>
+    <div class="weeks">
+      <div class="wk"><p class="w">1</p><p class="t">Tu Código</p><p class="d">Tu matriz y tu temperamento: tu Casa y tu Medicina.</p></div>
+      <div class="wk"><p class="w">2</p><p class="t">La Deuda del Alma</p><p class="d">Tu cola kármica: lo que trajiste y por dónde soltarlo.</p></div>
+      <div class="wk"><p class="w">3</p><p class="t">Tu lección principal</p><p class="d">Lo que esta vida insiste en enseñarte.</p></div>
+      <div class="wk"><p class="w">4</p><p class="t">Tu centro</p><p class="d">Tu carácter, la energía que alimenta a todas las demás.</p></div>
+      <div class="wk"><p class="w">5</p><p class="t">Tu Brújula</p><p class="d">Tu retrato: cómo te ve el mundo.</p></div>
+      <div class="wk"><p class="w">6</p><p class="t">Tus talentos</p><p class="d">Lo que te inspira, lo que te apaga y los dones que trajiste.</p></div>
+      <div class="wk"><p class="w">7</p><p class="t">Tus relaciones</p><p class="d">Los patrones que repites en el amor.</p></div>
+      <div class="wk"><p class="w">8</p><p class="t">Tu dinero</p><p class="d">Tu canal financiero y tu karma material: qué abre y qué bloquea tu flujo.</p></div>
+      <div class="wk"><p class="w">9</p><p class="t">Tu linaje</p><p class="d">Las líneas de tu padre y tu madre: lo que heredaste.</p></div>
+      <div class="wk"><p class="w">10</p><p class="t">Tus 4 destinos</p><p class="d">Personal, social, espiritual y planetario, y la edad de cada uno.</p></div>
+      <div class="wk"><p class="w">11</p><p class="t">Tu Medicina</p><p class="d">Integrar la energía que equilibra tu temperamento.</p></div>
+      <div class="wk"><p class="w">12</p><p class="t">Graduación</p><p class="d">Tu Mapa Código Orygen completo y tu año personal.</p></div>
+    </div>
+    <div class="includes">
+      <ul>
+        <li><b>12 sesiones grupales en vivo</b><span>En grupos de 15 a 25 personas, para que nadie se pierda.</span></li>
+        <li><b>El kit del Juego en tu casa</b><span>Tu tablero personal, 22 cartas de arcanos y la bitácora de retos.</span></li>
+        <li><b>Tu Casa</b><span>Una comunidad privada con jugadores de tu mismo temperamento.</span></li>
+        <li><b>La Llave incluida</b><span>Tu lectura 1:1 de 45 minutos antes de empezar, si aún no la tomaste ($459).</span></li>
+        <li><b>3 meses de Círculo incluidos</b><span>Para seguir el viaje al terminar ($837).</span></li>
+      </ul>
+      <div class="box">
+        <p class="muted">Próxima generación</p>
+        <p class="price" style="margin-top:6px">$5,790 <small style="color:var(--muted)">MXN</small></p>
+        <p class="alt">o 3 pagos de $2,090</p>
+        <p class="muted">Si ya tomaste La Llave en los últimos 14 días, su valor se descuenta de tu inscripción.</p>
+        <p style="margin-top:22px"><a class="btn" style="width:100%" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=sitio&amp;utm_campaign=juego" target="_blank" rel="noopener">Quiero entrar al Juego</a></p>
+        <p class="muted" style="font-size:.88rem">Te escribimos por WhatsApp con la fecha de inicio y el cupo disponible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTOS -->
+<section class="light" id="eventos">
+  <div class="wrap">
+    <p class="kicker">Eventos presenciales</p>
+    <h2 style="max-width:16em">El método, vivido en persona.</h2>
+    <div class="g3" style="margin-top:44px">
+      <div class="ev"><p class="t">Portal de Cumpleaños</p><p class="p">$1,090</p><p class="d">Taller mensual de 3 horas para quienes cumplen años ese mes: calculan la energía de su año personal, que empieza el día del cumpleaños.</p></div>
+      <div class="ev"><p class="t">Alquimia de los 4 Temperamentos</p><p class="p">$2,090 · preventa $1,790</p><p class="d">Un día con cuatro estaciones: Fuego, Aire, Tierra y Agua. Cada persona vive con más intensidad la estación de su Medicina.</p></div>
+      <div class="ev"><p class="t">Dinero y Destino</p><p class="p">$1,590</p><p class="d">Taller de 4 horas que une tu canal financiero y tu karma material con finanzas prácticas.</p></div>
+      <div class="ev"><p class="t">Matriz en Pareja o en Familia</p><p class="p">$1,890 por pareja · $2,590 familia de hasta 4</p><p class="d">Taller de 4 horas sobre el canal de relaciones y el canal padres-hijos.</p></div>
+      <div class="ev"><p class="t">Retiro El Viaje del Loco</p><p class="p">$11,490 a $17,290</p><p class="d">Tres días fuera de la ciudad recorriendo los 22 arcanos en estaciones vivenciales, con hospedaje y comidas.</p></div>
+      <div class="ev"><p class="t">Orygen para Equipos</p><p class="p">Cotización por grupo</p><p class="d">Dinámica de temperamentos para empresas: cómo vive cada persona de tu equipo la presión, el logro y el cambio.</p></div>
+    </div>
+    <p style="margin-top:32px"><a class="btn ghost" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=sitio&amp;utm_campaign=eventos" target="_blank" rel="noopener">Avísame del próximo evento</a></p>
+  </div>
+</section>
+
+<!-- CUMPLEAÑOS -->
+<section class="deep">
+  <div class="wrap g2" style="align-items:center">
+    <div>
+      <p class="kicker">Cada año empieza de nuevo</p>
+      <h2>Tu año no empieza el 1 de enero. Empieza el día de tu cumpleaños.</h2>
+    </div>
+    <div>
+      <p class="lede">Según la Matriz del Destino, cada año personal trae su propia energía. Por eso, quien camina con Código Orygen recibe en su cumpleaños la lectura de su nuevo año, y cada mes celebramos el Portal de Cumpleaños para quienes estrenan ciclo.</p>
+      <ul class="credits muted">
+        <li>La Llave se acredita al 100% al Juego o al programa privado durante 14 días.</li>
+        <li>El Juego incluye La Llave y 3 meses de Círculo.</li>
+        <li>El programa privado incluye el Juego y 6 meses de Círculo.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="preguntas">
+  <div class="wrap narrow">
+    <h2 style="margin-bottom:28px">Preguntas frecuentes</h2>
+    <details><summary>¿Necesito saber numerología o tarot?</summary><p>No. Calculamos tu matriz contigo y explicamos cada energía desde cero.</p></details>
+    <details><summary>¿Esto es adivinación?</summary><p>No. La Matriz del Destino es una herramienta de autoconocimiento: no predice tu futuro, te muestra con qué energías cuentas y cómo trabajarlas.</p></details>
+    <details><summary>¿El temperamento es un diagnóstico?</summary><p>No. Es un perfil orientativo basado en los cuatro temperamentos hipocráticos. Te ayuda a entender cómo vives tus energías; no es una evaluación psicológica ni clínica.</p></details>
+    <details><summary>¿Por dónde me conviene empezar?</summary><p>Por la calculadora gratuita. Si lo que ves te hace sentido, La Llave es el siguiente paso natural, y su valor se acredita si después decides entrar al Juego.</p></details>
+    <details><summary>¿Las sesiones son en línea?</summary><p>La Llave, el Círculo, el Juego y el programa privado son en línea. Los eventos son presenciales.</p></details>
+    <details><summary>¿Sustituye una terapia?</summary><p>No. Es un proceso de desarrollo personal y no reemplaza la atención médica, psicológica, legal ni financiera de un profesional.</p></details>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="light final">
+  <div class="wrap">
+    <h2>Tu código ya está escrito. Lo que hagas con él, no.</h2>
+    <p class="lede">Empieza por descubrirlo. Es gratis y toma dos minutos.</p>
+    <div class="actions"><a class="btn" href="calculadora.html">Descubre tu código</a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Código Orygen une la Matriz del Destino con los temperamentos hipocráticos como herramienta de autoconocimiento. El perfil temperamental es orientativo. No predice el futuro ni sustituye la orientación médica, psicológica, legal o financiera de un profesional. Precios en pesos mexicanos, con IVA incluido.</p>
+    <p><a href="aviso-de-privacidad.html">Aviso de privacidad</a></p>
+  </div>
+</footer>
+</body>
+</html>

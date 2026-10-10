@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculadora · Código Orygen</title>
+<meta name="description" content="Descubre gratis tu Matriz del Destino y tu temperamento con el Método Código Orygen.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' fill='%2321080C'/><g fill='none' stroke='%23D4AE5A' stroke-width='2.4'><rect x='10' y='10' width='20' height='20'/><rect x='10' y='10' width='20' height='20' transform='rotate(45 20 20)'/></g></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3ECDF; --surface:#EADFCB; --ink:#2A0E13; --muted:#6B5148;
+  --gold:#8E6A1F; --red:#8A2230; --line:rgba(42,14,19,.16); --on-red:#F6EEE2;
+  --display:"Cormorant Garamond",Garamond,"Times New Roman",serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#21080C; --surface:#2E0F15; --ink:#F1E6D4; --muted:#C4AE96;
+    --gold:#D4AE5A; --red:#C23A46; --line:rgba(241,230,212,.15); --on-red:#FFF6EA;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#21080C; --surface:#2E0F15; --ink:#F1E6D4; --muted:#C4AE96;
+  --gold:#D4AE5A; --red:#C23A46; --line:rgba(241,230,212,.15); --on-red:#FFF6EA;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+header.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.45rem;font-weight:600;letter-spacing:.01em;text-decoration:none}
+.brand svg{width:26px;height:26px}
+.top small{color:var(--muted);font-size:.85rem}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:24px 0 56px}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(2.6rem,5.6vw,4.4rem);line-height:1.02;margin:0 0 18px;letter-spacing:-.01em}
+.hero .lede{font-size:1.1rem;color:var(--muted);max-width:30em;margin:0 0 32px}
+
+.code-entry{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:.82rem;color:var(--muted)}
+.field input{
+  font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1;
+  width:2.4em;padding:8px 0 6px;text-align:center;background:transparent;color:var(--ink);
+  border:0;border-bottom:2px solid var(--ink);border-radius:0;outline:none;
+  font-variant-numeric:lining-nums tabular-nums;
+}
+.field.year input{width:3.6em}
+.field input:focus{border-bottom-color:var(--red)}
+.field input::placeholder{color:var(--line);opacity:1}
+.sep{font-family:var(--display);font-size:2.2rem;color:var(--muted);padding-bottom:10px}
+.btn{
+  font-family:var(--body);font-weight:600;font-size:1rem;cursor:pointer;
+  background:var(--red);color:var(--on-red);border:0;border-radius:999px;padding:15px 26px;
+  margin-left:8px;text-decoration:none;display:inline-block;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:focus-visible,.field input:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.error{color:var(--red);font-size:.92rem;min-height:1.4em;margin:12px 0 0}
+
+/* OCTOGRAM */
+.octo{width:100%;max-width:470px;justify-self:center;aspect-ratio:1}
+.octo .frame{fill:none;stroke:var(--line);stroke-width:1.2}
+.octo .ray{stroke:var(--line);stroke-width:1}
+.octo .node{fill:var(--bg);stroke:var(--ink);stroke-width:1.4}
+.octo .node.center{stroke:var(--gold);stroke-width:2}
+.octo .lock{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.octo text.num{font-family:var(--display);font-weight:700;font-size:26px;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.octo text.num.center{fill:var(--gold);font-size:34px}
+.octo text.cap{font-family:var(--body);font-size:11px;fill:var(--muted);text-anchor:middle}
+.octo .num{opacity:0}
+.octo.revealed .num{animation:in .6s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes in{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.octo text.num{transform-box:fill-box;transform-origin:center}
+
+/* RESULTS */
+#resultado{display:none;padding:56px 0 24px;border-top:1px solid var(--line)}
+#resultado.show{display:block}
+.res-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px}
+.center-card .kicker{color:var(--muted);font-size:.95rem;margin:0 0 6px}
+.center-card h2{font-family:var(--display);font-weight:600;font-size:clamp(2.2rem,4.4vw,3.2rem);line-height:1.05;margin:0 0 6px}
+.center-card .arc{font-family:var(--display);font-size:1.25rem;font-style:italic;color:var(--gold);margin:0 0 22px}
+.center-card .why{color:var(--muted);margin:0 0 26px;max-width:34em}
+.states{display:grid;gap:14px}
+.state{padding:18px 20px;background:var(--surface);border-radius:4px}
+.state h3{font-size:.95rem;font-weight:600;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.state p{margin:0}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.open{background:var(--ink)}
+.dot.closed{background:var(--red)}
+
+.locked h2{font-family:var(--display);font-weight:600;font-size:1.9rem;margin:0 0 6px;line-height:1.1}
+.locked > p{color:var(--muted);margin:0 0 18px}
+.locked ul{list-style:none;margin:0;padding:0}
+.locked li{display:grid;grid-template-columns:56px 1fr 20px;gap:14px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+.locked li:last-child{border-bottom:1px solid var(--line)}
+.locked .n{font-family:var(--display);font-weight:700;font-size:2rem;line-height:1;color:var(--ink)}
+.locked .q{font-weight:500}
+.locked .pos{display:block;font-size:.85rem;color:var(--muted);font-weight:400}
+.locked svg{width:18px;height:18px;color:var(--muted)}
+
+/* LA LLAVE */
+.llave{margin:64px 0 40px;padding:48px;background:var(--surface);border-radius:4px;display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start}
+.llave h2{font-family:var(--display);font-weight:600;font-size:clamp(2rem,4vw,2.8rem);line-height:1.05;margin:0 0 12px}
+.llave .intro{color:var(--muted);margin:0 0 24px;max-width:32em}
+.llave ol{margin:0;padding:0;list-style:none;counter-reset:k}
+.llave li{padding:14px 0 14px 0;border-top:1px solid var(--line)}
+.llave li strong{display:block;font-weight:600}
+.llave li span{color:var(--muted)}
+.price{font-family:var(--display);font-weight:700;font-size:3.4rem;line-height:1;margin:0}
+.price small{font-family:var(--body);font-size:1rem;font-weight:500;color:var(--muted)}
+.credit{margin:14px 0 26px;max-width:24em}
+.llave .btn{margin-left:0}
+.pending{font-size:.9rem;color:var(--muted);margin:12px 0 0;min-height:1.3em}
+
+footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+footer p{max-width:46em;margin:0}
+
+@media (max-width:860px){
+  .hero,.res-grid,.llave{grid-template-columns:1fr}
+  .hero{gap:32px}
+  .octo{order:-1;max-width:360px}
+  .llave{padding:32px 24px}
+}
+@media (max-width:420px){
+  .field input{font-size:2rem}
+  .btn{margin-left:0;margin-top:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  .octo.revealed .num{animation:none;opacity:1}
+  html{scroll-behavior:auto}
+}
+
+/* QUIZ */
+#quiz{display:none;padding:48px 0 64px;border-top:1px solid var(--line)}
+#quiz.show{display:block}
+.quiz-wrap{max-width:720px}
+.quiz-wrap .kicker{color:var(--muted);margin:0 0 6px;font-size:.95rem}
+.quiz-wrap h2{font-family:var(--display);font-weight:600;font-size:clamp(1.9rem,3.6vw,2.6rem);line-height:1.08;margin:0 0 10px}
+.quiz-wrap .intro{color:var(--muted);margin:0 0 28px}
+.bar{height:3px;background:var(--line);margin:0 0 26px;border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--red);width:0;transition:width .3s}
+.qcount{font-size:.85rem;color:var(--muted);margin:0 0 8px}
+.qtext{font-family:var(--display);font-weight:600;font-size:1.7rem;line-height:1.15;margin:0 0 20px}
+.opts{display:grid;gap:12px}
+.opt{font:inherit;text-align:left;cursor:pointer;background:var(--surface);color:var(--ink);border:1px solid transparent;border-radius:4px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start}
+.opt:hover{border-color:var(--ink)}
+.opt.sel{border-color:var(--red)}
+.opt b{font-family:var(--display);font-size:1.3rem;line-height:1;color:var(--red);min-width:1em}
+.qnav{display:flex;justify-content:space-between;margin-top:18px}
+.link{font:inherit;background:none;border:0;color:var(--muted);cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
+.link:disabled{visibility:hidden}
+
+/* TEMPERAMENT */
+.temp{margin:0 0 56px;display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:start}
+.temp .kicker{color:var(--muted);margin:0 0 6px;font-size:.95rem}
+.temp h2{font-family:var(--display);font-weight:600;font-size:clamp(2.4rem,5vw,3.6rem);line-height:1;margin:0 0 8px}
+.temp .el{font-family:var(--display);font-style:italic;font-size:1.3rem;color:var(--gold);margin:0 0 14px}
+.temp .second{color:var(--muted);margin:0}
+.tgrid{display:grid;gap:0}
+.tgrid div{padding:14px 0;border-top:1px solid var(--line)}
+.tgrid div:last-child{border-bottom:1px solid var(--line)}
+.tgrid strong{display:block;font-weight:600;font-size:.92rem}
+.tgrid span{color:var(--muted)}
+.relation{margin:0 0 26px;padding:16px 20px;border-left:3px solid var(--gold);background:var(--surface)}
+.relation strong{display:block;margin-bottom:2px}
+.tag{font-size:.75rem;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:999px;border:1px solid var(--gold);color:var(--gold);white-space:nowrap;justify-self:end}
+.tag.med{border-color:var(--red);color:var(--red)}
+.locked li{grid-template-columns:56px 1fr auto 20px !important}
+@media (max-width:860px){.temp{grid-template-columns:1fr;gap:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="22" height="22"/><rect x="9" y="9" width="22" height="22" transform="rotate(45 20 20)"/></g><circle cx="20" cy="20" r="2.6" fill="currentColor"/></svg>
+      Código Orygen
+    </a>
+    <a href="index.html#camino" style="color:var(--muted);font-size:.92rem">Conoce el camino</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Tu fecha de nacimiento es un código.</h1>
+      <p class="lede">Ocho dígitos, veintidós energías y un temperamento. Descubre qué energías traes y cómo las vives: la única lectura de la Matriz del Destino que toma en cuenta tu temperamento.</p>
+      <form id="f" novalidate>
+        <div class="code-entry">
+          <div class="field"><label for="d">Día</label><input id="d" inputmode="numeric" maxlength="2" placeholder="DD" autocomplete="bday-day"></div>
+          <span class="sep" aria-hidden="true">/</span>
+          <div class="field"><label for="m">Mes</label><input id="m" inputmode="numeric" maxlength="2" placeholder="MM" autocomplete="bday-month"></div>
+          <span class="sep" aria-hidden="true">/</span>
+          <div class="field year"><label for="y">Año</label><input id="y" inputmode="numeric" maxlength="4" placeholder="AAAA" autocomplete="bday-year"></div>
+          <button class="btn" type="submit">Abrir mi código</button>
+        </div>
+        <p class="error" id="err" role="alert"></p>
+      </form>
+    </div>
+
+    <svg class="octo" id="octo" viewBox="0 0 400 400" role="img" aria-label="Octograma de tu matriz">
+      <rect class="frame" x="94" y="94" width="212" height="212"/>
+      <polygon class="frame" points="200,50 350,200 200,350 50,200"/>
+      <line class="ray" x1="200" y1="50" x2="200" y2="350"/>
+      <line class="ray" x1="50" y1="200" x2="350" y2="200"/>
+      <line class="ray" x1="94" y1="94" x2="306" y2="306"/>
+      <line class="ray" x1="306" y1="94" x2="94" y2="306"/>
+      <circle class="lock" cx="94" cy="94" r="7"/><circle class="lock" cx="306" cy="94" r="7"/>
+      <circle class="lock" cx="306" cy="306" r="7"/><circle class="lock" cx="94" cy="306" r="7"/>
+      <circle class="node" cx="50" cy="200" r="26"/><circle class="node" cx="200" cy="50" r="26"/>
+      <circle class="node" cx="350" cy="200" r="26"/><circle class="node" cx="200" cy="350" r="26"/>
+      <circle class="node center" cx="200" cy="200" r="34"/>
+      <text class="num" id="t-d" x="50" y="200"></text>
+      <text class="num" id="t-m" x="200" y="50"></text>
+      <text class="num" id="t-y" x="350" y="200"></text>
+      <text class="num" id="t-b" x="200" y="350"></text>
+      <text class="num center" id="t-c" x="200" y="200"></text>
+      <text class="cap" x="50" y="244">Retrato</text>
+      <text class="cap" x="200" y="18">Esencia</text>
+      <text class="cap" x="350" y="244">Patrones</text>
+      <text class="cap" x="200" y="394">Lección</text>
+    </svg>
+  </section>
+
+  <section id="quiz" aria-live="polite">
+    <div class="quiz-wrap">
+      <p class="kicker">Tu código ya está calculado</p>
+      <h2>Ahora, tu temperamento</h2>
+      <p class="intro">Tu fecha dice qué energías traes. Tu temperamento dice cómo las vives. Catorce preguntas rápidas: elige la opción que más se parezca a ti, no la que te gustaría.</p>
+      <div class="bar"><span id="bar"></span></div>
+      <p class="qcount" id="qcount"></p>
+      <p class="qtext" id="qtext"></p>
+      <div class="opts">
+        <button class="opt" type="button" id="optA"><b>A</b><span id="txtA"></span></button>
+        <button class="opt" type="button" id="optB"><b>B</b><span id="txtB"></span></button>
+      </div>
+      <div class="qnav"><button class="link" type="button" id="back">Pregunta anterior</button></div>
+    </div>
+  </section>
+
+  <section id="resultado" aria-live="polite">
+    <div class="temp">
+      <div>
+        <p class="kicker">Tu temperamento</p>
+        <h2 id="tp-name"></h2>
+        <p class="el" id="tp-el"></p>
+        <p class="second" id="tp-second"></p>
+      </div>
+      <div class="tgrid">
+        <div><strong>Tu luz</strong><span id="tp-luz"></span></div>
+        <div><strong>Tu sombra</strong><span id="tp-sombra"></span></div>
+        <div><strong>Tu Casa</strong><span id="tp-casa"></span></div>
+        <div><strong>Tu Medicina</strong><span id="tp-med"></span></div>
+      </div>
+    </div>
+
+    <div class="res-grid">
+      <div class="center-card">
+        <p class="kicker">Tu centro, la energía que mueve todo tu mapa</p>
+        <h2 id="c-title"></h2>
+        <p class="arc" id="c-arc"></p>
+        <div class="relation"><strong id="rel-title"></strong><span id="rel-text"></span></div>
+        <div class="states">
+          <div class="state"><h3><span class="dot open"></span>Llave abierta</h3><p id="c-plus"></p></div>
+          <div class="state"><h3><span class="dot closed"></span>Llave cerrada</h3><p id="c-minus"></p></div>
+        </div>
+      </div>
+
+      <div class="locked">
+        <h2>Cuatro puertas más</h2>
+        <p>Ya calculamos tus otras cuatro energías y cuáles pertenecen a tu Casa. Su lectura se abre con La Llave.</p>
+        <ul id="locked-list"></ul>
+        <p style="margin:22px 0 8px;color:var(--muted)">¿Quieres tu Mapa de Origen por WhatsApp? Te lo enviamos gratis.</p>
+        <a class="btn" style="margin-left:0;background:transparent;color:var(--ink);border:1px solid var(--ink)" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=calculadora&amp;utm_campaign=mapa" target="_blank" rel="noopener">Recibir mi Mapa de Origen</a>
+      </div>
+    </div>
+
+    <div class="llave" id="llave">
+      <div>
+        <h2>La Llave de Orygen</h2>
+        <p class="intro">Tu centro es la primera puerta. La Llave es una lectura 1:1 en vivo para abrir las demás, leídas con tu temperamento.</p>
+        <ol>
+          <li><strong>Sesión 1:1 de 45 minutos</strong><span>Tu centro, tu retrato, tu propósito personal y tu temperamento con su Medicina.</span></li>
+          <li><strong>Tu mapa en PDF</strong><span>Con las zonas que quedan por descubrir: cola kármica, dinero, relaciones y linaje.</span></li>
+          <li><strong>Tu reto de 7 días</strong><span>Diseñado para tu temperamento, para empezar a abrir tu llave cerrada.</span></li>
+          
+        </ol>
+      </div>
+      <div>
+        <p class="price">$459 <small>MXN</small></p>
+        <p class="credit">El 100% se acredita al Juego del Destino o al programa privado si te inscribes en los siguientes 14 días.</p>
+        <a class="btn" href="https://tally.so/r/0Qp2WA?utm_source=web&amp;utm_medium=calculadora&amp;utm_campaign=llave" target="_blank" rel="noopener">Quiero mi Llave</a>
+        <p class="pending"><a href="index.html#camino" style="color:var(--muted)">Ver todo el camino</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Código Orygen une la Matriz del Destino con los temperamentos hipocráticos como herramienta de autoconocimiento. El perfil temperamental es orientativo: no es una evaluación psicológica ni un diagnóstico, no predice el futuro y no sustituye la orientación médica, psicológica, legal o financiera de un profesional. <a href="aviso-de-privacidad.html" style="color:var(--muted)">Aviso de privacidad</a></p>
+  </footer>
+</div>
+
+<script>
+const ARC = {
+ 1:["El Mago","Iniciativa y convicción. Lo que imaginas puede hacerse realidad y tienes madera de líder.","Dudar de ti o dispersarte. Esta energía amplifica todo tu mapa, para bien o para mal."],
+ 2:["La Sacerdotisa","Intuición fina, discreción y la capacidad de comprender lo que otros no ven.","Guardarte todo, desconfiar o perderte en el misterio sin pasar a la acción."],
+ 3:["La Emperatriz","Crear, nutrir y hacer crecer. Tienes un don para la abundancia y la vida bien vivida.","Medir tu valor por lo que tienes o por lo que aparentas."],
+ 4:["El Emperador","Responsabilidad, orden y capacidad de dirigir. Sabes construir y sostener.","Querer controlarlo todo y volverte rígido, en casa o en el trabajo."],
+ 5:["El Maestro","Aprender y enseñar. Curiosidad por muchos campos y talento para darles estructura.","Creer sin verificar o enseñar lo que todavía no dominas."],
+ 6:["Los Enamorados","Comunicación cálida, buen gusto y vínculos que nutren a quienes te rodean.","Exigir atención y amor en lugar de darlo."],
+ 7:["El Carro","Metas claras y avance constante. Tu energía es la del logro.","Impacientarte con el ritmo de los demás e intentar ganar solo."],
+ 8:["La Justicia","Ves causas y consecuencias, asumes responsabilidades y haces las cosas en regla.","Cargar con más de lo que puedes, no saber decir que no o juzgar con dureza."],
+ 9:["El Ermitaño","Profundidad y autosuficiencia. Acumulas sabiduría para compartirla con quien la valora.","Aislarte por completo y guardarte lo que sabes."],
+ 10:["La Rueda de la Fortuna","Fluir y confiar en los ciclos. Las cosas llegan cuando dejas de forzarlas.","Querer controlar cada giro y vivir los altibajos sin un colchón que te sostenga."],
+ 11:["La Fuerza","Una enorme capacidad de trabajo y un potencial que pocos tienen.","Imponerte por la fuerza o agotarte sin darte descanso."],
+ 12:["El Colgado","Empatía y vocación de servicio. Ves la vida desde un ángulo distinto.","Sentirte víctima de las circunstancias y quedarte en la queja."],
+ 13:["La Transformación","Soltar lo que ya no sirve y renacer. Sabes cerrar ciclos.","Temer al cambio y aferrarte a lo que ya terminó."],
+ 14:["La Templanza","Alma madura, creatividad y una elegancia discreta. Encuentras la medida justa.","Subestimarte y pasar tan desapercibido que tu talento no se vea."],
+ 15:["El Diablo","Carisma y magnetismo. Tienes un poder de persuasión fuera de lo común.","Dejarte llevar por las tentaciones o usar tu influencia para manipular."],
+ 16:["La Torre","Transformación profunda. Sabes reconstruirte desde cero, sin apegos.","Aferrarte a lo que construyes y vivir cada caída como un castigo."],
+ 17:["La Estrella","Profesionalismo y brillo propio. Naciste para darte a conocer e inspirar.","Esconder tu talento y no atreverte a mostrarte."],
+ 18:["La Luna","Imaginación e intuición. Tus pensamientos tienden a materializarse.","Dejar que los miedos crezcan hasta volverse reales."],
+ 19:["El Sol","Generosidad, alegría y prosperidad. Iluminas cualquier espacio.","Vivir desde la escasez y el «no me alcanza»."],
+ 20:["El Juicio","Conexión con tus raíces y tu familia. Puedes llevar a tu linaje a otro nivel.","Cargar con los miedos y los asuntos pendientes del pasado familiar."],
+ 21:["El Mundo","Paz y apertura al mundo. Te mueves bien entre culturas, idiomas y fronteras.","Encerrarte en creencias que limitan tu horizonte."],
+ 22:["El Loco","Libertad, espontaneidad y la frescura de quien mira la vida como un niño.","Dejar que otros te encierren en sus moldes o vivir sin rumbo."]
+};
+const TEMP = {
+ C:{name:"Colérico",el:"Fuego · caliente y seco",casa:[4,5,7,11,15],med:14,medName:"La Templanza",
+    luz:"Voluntad, dirección y capacidad de logro. Rompes estructuras y mueves a otros.",
+    sombra:"Autoritarismo, impulsividad y poca tolerancia a la frustración.",
+    medTxt:"la paciencia y la moderación que convierten tu fuego en fuerza sostenida."},
+ S:{name:"Sanguíneo",el:"Aire · caliente y húmedo",casa:[1,3,6,10,22],med:9,medName:"El Ermitaño",
+    luz:"Apertura, conexión con la gente, ligereza y gusto por lo nuevo.",
+    sombra:"Dispersión y falta de profundidad.",
+    medTxt:"el silencio, la pausa y la introspección que te dan raíz."},
+ M:{name:"Melancólico",el:"Tierra · frío y seco",casa:[8,9,12,13,20],med:19,medName:"El Sol",
+    luz:"Profundidad, análisis, rigor y memoria. Ves lo que otros pasan por alto.",
+    sombra:"Rumiación, perfeccionismo y aislamiento.",
+    medTxt:"la alegría, la vitalidad y la salida al mundo que rompen el aislamiento."},
+ F:{name:"Flemático",el:"Agua · frío y húmedo",casa:[2,14,17,18,21],med:16,medName:"La Torre",
+    luz:"Calma, estabilidad y diplomacia. Pocas cosas te sacuden y sabes mediar.",
+    sombra:"Inercia, pasividad y comodidad.",
+    medTxt:"la sacudida que rompe la inercia y te obliga a reconstruirte."}
+};
+const Q = [
+ ["En una reunión con gente nueva…","Me acerco a conversar con varios.","Prefiero hablar con una o dos personas que ya conozco."],
+ ["Para recargar energía después de una semana pesada…","Salgo y veo gente.","Busco tiempo a solas."],
+ ["Cuando tengo una idea…","La platico en voz alta para darle forma.","La pienso a fondo antes de compartirla."],
+ ["Mi ritmo natural es…","Rápido, me gusta tener varias cosas en marcha.","Pausado, prefiero terminar algo antes de empezar otra cosa."],
+ ["En un grupo…","Tomo la palabra con facilidad.","Observo antes de intervenir."],
+ ["Mi fin de semana ideal…","Planes, salidas y gente.","Calma y actividades tranquilas."],
+ ["Ante algo nuevo…","Me lanzo y aprendo en el camino.","Investigo y me preparo antes."],
+ ["Cuando algo sale mal…","Me afecta con fuerza y me cuesta soltarlo.","Me molesta un rato y sigo adelante."],
+ ["Ante una crítica…","La siento intensamente, me enoja o me duele.","La escucho con calma y tomo lo útil."],
+ ["Bajo presión…","Me acelero, me tenso o me irrito.","Mantengo la calma casi siempre."],
+ ["Mis emociones…","Suben y bajan con facilidad, y se notan.","Son estables, pocas cosas me sacuden."],
+ ["Cuando algo me preocupa…","Le doy vueltas una y otra vez.","Lo dejo ir hasta que tenga que resolverlo."],
+ ["Si alguien me lleva la contraria…","Reacciono rápido.","Rara vez me altero."],
+ ["Antes de un evento importante…","Siento nervios o tensión fuerte.","Me siento tranquilo."]
+];
+const POS = [
+ ["d","Cómo te ve la gente","Retrato, tu día de nacimiento"],
+ ["m","Lo que te inspira y lo que te apaga","Esencia más alta, tu mes"],
+ ["y","Lo que se repite en tu vida","Eventos recurrentes, tu año"],
+ ["b","Tu lección del pasado","Lección kármica principal"]
+];
+const lockIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+
+const digitSum=n=>String(n).split("").reduce((a,c)=>a+Number(c),0);
+const reduce=n=>{while(n>22)n=digitSum(n);return n};
+function matrix(d,m,y){const D=reduce(d),M=m,Y=reduce(digitSum(y)),B=reduce(D+M+Y),C=reduce(D+M+Y+B);return{d:D,m:M,y:Y,b:B,c:C}}
+
+function temperament(ans){
+  const e=ans.slice(0,7).filter(a=>a==="A").length, r=ans.slice(7).filter(a=>a==="A").length;
+  const E=e>=4, R=r>=4;
+  const key=E?(R?"C":"S"):(R?"M":"F");
+  const eClose=(e===4||e===3), rClose=(r===4||r===3);
+  let second=null, both=false;
+  if(eClose&&rClose) both=true;
+  else if(eClose) second=(!E)?(R?"C":"S"):(R?"M":"F");
+  else if(rClose) second=E?(R?"S":"C"):(R?"F":"M");
+  return {key,second,both};
+}
+function ownerOf(n){for(const k in TEMP){if(TEMP[k].casa.includes(n))return k}return null}
+function relation(c,k){
+  const T=TEMP[k];
+  if(T.casa.includes(c)) return ["Tu centro es de tu Casa","Lo vives con naturalidad. En negro es tu talento más fluido; en rojo exagera tu sombra: "+T.sombra.toLowerCase()];
+  if(c===T.med) return ["Tu centro es tu Medicina","La energía que equilibra tu temperamento está en el corazón de tu mapa. Puede sentirse incómoda, pero es tu mayor fuente de equilibrio."];
+  const o=ownerOf(c);
+  if(o) return ["Tu centro pertenece a la Casa "+TEMP[o].el.split(" ·")[0],"Es una energía "+TEMP[o].name.toLowerCase()+" que no te sale de forma natural: la vives filtrada por tu temperamento "+T.name.toLowerCase()+" y te pide un esfuerzo consciente."];
+  const isSun=c===19;
+  return ["Tu centro es una medicina pura","No pertenece a ninguna Casa. "+(isSun?"El Sol trae vitalidad, alegría y expansión a todo tu mapa.":"La Torre trae sacudidas que te obligan a reconstruirte sin apegos.")];
+}
+
+const $=id=>document.getElementById(id);
+const ins=[$("d"),$("m"),$("y")];
+ins.forEach((el,i)=>el.addEventListener("input",()=>{el.value=el.value.replace(/\D/g,"");if(el.value.length===el.maxLength&&ins[i+1])ins[i+1].focus()}));
+
+let R=null, answers=[], qi=0;
+function showQ(){
+  const q=Q[qi];
+  $("qcount").textContent=`Pregunta ${qi+1} de ${Q.length}`;
+  $("qtext").textContent=q[0];$("txtA").textContent=q[1];$("txtB").textContent=q[2];
+  $("optA").classList.toggle("sel",answers[qi]==="A");$("optB").classList.toggle("sel",answers[qi]==="B");
+  $("bar").style.width=(qi/Q.length*100)+"%";
+  $("back").disabled=qi===0;
+}
+function pick(v){
+  answers[qi]=v;
+  if(qi<Q.length-1){qi++;showQ()}else{$("bar").style.width="100%";finish()}
+}
+$("optA").addEventListener("click",()=>pick("A"));
+$("optB").addEventListener("click",()=>pick("B"));
+$("back").addEventListener("click",()=>{if(qi>0){qi--;showQ()}});
+
+$("f").addEventListener("submit",e=>{
+  e.preventDefault();
+  const d=+ins[0].value,m=+ins[1].value,y=+ins[2].value;
+  const err=$("err");err.textContent="";
+  const valid=y>=1900&&y<=new Date().getFullYear()&&m>=1&&m<=12&&d>=1&&d<=new Date(y,m,0).getDate();
+  if(!ins[0].value||!ins[1].value||ins[2].value.length!==4||!valid){err.textContent="Revisa tu fecha: escribe día, mes y un año de cuatro cifras válidos.";return}
+  R=matrix(d,m,y);
+  const octo=$("octo");octo.classList.remove("revealed");void octo.getBoundingClientRect();
+  ["d","m","y","b","c"].forEach((k,i)=>{const t=$("t-"+k);t.textContent=R[k];t.style.animationDelay=(i*0.18)+"s"});
+  octo.classList.add("revealed");
+  answers=[];qi=0;showQ();
+  $("resultado").classList.remove("show");
+  const qz=$("quiz");qz.classList.add("show");
+  setTimeout(()=>qz.scrollIntoView({block:"start"}),matchMedia("(prefers-reduced-motion: reduce)").matches?0:1000);
+});
+
+function finish(){
+  const t=temperament(answers),T=TEMP[t.key];
+  $("tp-name").textContent=T.name;
+  $("tp-el").textContent=T.el;
+  $("tp-second").textContent=t.both?"Tus dos ejes quedaron muy parejos: confirma tu temperamento en tu Lectura.":(t.second?"Con rasgos de "+TEMP[t.second].name.toLowerCase()+": uno de tus ejes quedó en la frontera.":"");
+  $("tp-luz").textContent=T.luz;$("tp-sombra").textContent=T.sombra;
+  $("tp-casa").textContent="Energías "+T.casa.slice(0,-1).join(", ")+" y "+T.casa.at(-1)+". Las vives con naturalidad.";
+  $("tp-med").textContent=T.med+", "+T.medName+": "+T.medTxt;
+
+  const a=ARC[R.c];
+  $("c-title").textContent="Energía "+R.c;$("c-arc").textContent=a[0];
+  const rel=relation(R.c,t.key);$("rel-title").textContent=rel[0];$("rel-text").textContent=rel[1];
+  $("c-plus").textContent=a[1];$("c-minus").textContent=a[2];
+
+  $("locked-list").innerHTML=POS.map(([k,q,p])=>{
+    const v=R[k];let tag="<span></span>";
+    if(T.casa.includes(v))tag='<span class="tag">De tu Casa</span>';
+    else if(v===T.med)tag='<span class="tag med">Tu Medicina</span>';
+    return `<li><span class="n">${v}</span><span class="q">${q}<span class="pos">${p}</span></span>${tag}${lockIcon}</li>`;
+  }).join("");
+
+  $("quiz").classList.remove("show");
+  const res=$("resultado");res.classList.add("show");res.scrollIntoView({block:"start"});
+}
+
+
+</script>
+</body>
+</html>
